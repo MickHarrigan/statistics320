@@ -1,0 +1,98 @@
+close all;
+clear;
+% account for the fact that you want separate plots for each section
+
+%Section 3.2 PMF for binary strings
+disp(' ');
+disp('Section 3.2');
+
+% Don't forget new figures
+
+n = 100;  % number of columns = length of binary string
+Ntrials = [100 1000 10000];  % diffent number of trials, per assignment
+p1 = [0.5 0.9 0.1];  % different values of p1 given in the assignement
+bins_edges = [0.5:100.5]; % fill in the correct edges
+
+% set up storage for random variable statistics (small "s")
+outTable = zeros(length(Ntrials), length(p1));
+
+for ktrials = 1:length(Ntrials)
+    
+    % Each trial consists of 100 digits
+    random_numbers = rand(Ntrials(ktrials),100);  % 
+    
+    % Do you need a new figure?
+    figure();
+    
+    
+    for kp = 1:length(p1) %loop on values of p1
+        
+        subplot(3,1,kp);
+        work = (random_numbers<=p1(kp)); % set to 1's and zeros using p1
+        % think about how this works! It's a useful trick that you will
+        % need in later projects
+        
+        data = zeros(1,100); % initialize location of first 1 in each sample
+        for kn = 1:Ntrials(ktrials)  % for each of the 100 element samples
+    
+            % This code finds the location of the first one, or, if there
+            % are no ones, establishes 101 as the index
+            i1 = find(work(kn,:)==1); % find all of the 1's
+            if length(i1)==0  % if there are none
+                data(kn)=n+1; %    indicate beyond end of sequence
+            else
+                data(kn)=min(i1);% otherwise take the first 1
+            end
+        end
+        
+        % Generate the raw histogram for this sequence
+        hist_raw=histogram(data, 'BinEdges', bins_edges);
+        % Generate the scaled histogram for this sequence
+        %   Use 'Normalization','probability' again, because this is 
+        %   a PMF
+        hist_norm=histogram(data, 'BinEdges', bins_edges, 'Normalization', 'probability');
+
+        % Determine the theoretical geometric PMF and plot it on the same
+        % axes as the normalized PMF
+        k = (0:100);
+        theoretical_pmf = (1 - p1(kp)).^k * p1(kp);
+        
+
+        hold on;
+        stem(k, theoretical_pmf);
+        hold off;
+        
+        % Label your plots.  If you use subplots, and all subplots have the
+        % same x-axis, you can label the x-axis of only the lowest subplot in each 
+        % column of plots
+        xlabel("Bits Until First 1 Appearance");
+        ylabel("Probability of First Appearance");
+        legend('Scaled histogram', 'Prob Mass Fnc (PMF)');
+        title(['Section 3.2: ', int2str(Ntrials(ktrials)), ' index of first binary 1 in string for p: ', num2str(p1(kp))]);
+        %Compute and the sample mean and variance
+        sample_mean = mean(data);
+        sample_var = var(data);
+        
+        %Compute and save the population mean and variance
+        pop_mean = 1/p1(kp);
+        pop_var = (1 - p1(kp)) / (p1(kp)^2);
+        disp(['For ', int2str(Ntrials(ktrials)), ...
+            ' with p: ', num2str(p1(kp)), ', sample mean: ', ...
+            num2str(sample_mean), ' sample variance: ', num2str(sample_var), ...
+            ' population mean: ', num2str(pop_mean), ...
+            ' and population variance: ', num2str(pop_var)]);
+        
+        % Do whatever bookkeeping or housekeeping you need to do at the end of the loop
+        % combine means and vars into single group
+        values = [sample_mean, sample_var, pop_mean, pop_var];
+        outTable(ktrials, kp) = values;
+    end % loop on p1
+    
+end
+
+% Display the means and variances in a way that makes sense for you,
+% because you have to report them in the Project report.
+
+
+disp('-----------');
+disp(' '); 

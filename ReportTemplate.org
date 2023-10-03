@@ -1,0 +1,86 @@
+# title, author name, and date for use with each push to pdf
+#+title: *CMPE320 Project 2*
+#+author: Mick Harrigan
+#+date: {{{time(%m/%d/%Y)}}}
+#+subtitle: *Functions of a Random Variable*
+
+# push this to a pdf using
+# SPC m e l p
+
+# sets the sizing to that of the right paper and font size, as well as the general output format (article in this case)
+#+Latex_class: article
+#+Latex_class_options: [a4paper, 11pt]
+#+latex_header: \usepackage[margin=1.25in]{geometry}
+#+latex_header: \usepackage{amsmath}
+#+latex_header: \usepackage[nodisplayskipstretch]{setspace}
+\setstretch{1.5}
+
+# removes the table of contents from the output
+#+OPTIONS: toc:nil timestamp:t
+* Useful Information for Writing :noexport:
+** No Indentation / Line Skips
+noindent is used for removing the paragraph indentation that is used on each separated section.
+\noindent
+This is generally preceeded by \bigskip to space things out a little better
+
+
+** Figure Creation
+This is how a figure is created, gives a caption and a name, then a link to the file itself, based on the relative path.
+#+caption: Scatterplot of the values of R using equation 1
+#+name: fig:RScatterplot
+[[./Images/ScatterplotR1.jpg]]
+
+
+it is called through use of the [[]] linking format and using the field in the name section from above.
+
+** Equation Creation
+Uses the latex headers of
+\begin{equation} and \end{equation}
+can be named and captioned with #+name and #+caption like figures above.
+They are automatically numbered (and no numbers can be applied if equation is replaced with equation*)
+
+Inline equations are wrapped with $ characters. Formatting equations can be stolen from former works, or alternatively (and preferably) use something like EqualX
+
+** Table Creation
+Creates a table with name, alignment, caption.
+Inline latex can be used with \ key. DO NOT USE ANYTHING WITH | KEY, BREAKS THE FORMATTING.
+#+caption: Expected values of both random variable S and respective function of R
+#+name: tab:ExpectedVals
+#+ATTR_LATEX: :align |c|c|c|c|
+|--------+-----------------+--------+---------|
+| Method | Function of R   |   E[S] | E[g(R)] |
+|--------+-----------------+--------+---------|
+|      1 | R, R \geq 0     | 1.0010 |  0.0022 |
+|      2 | \lvert R \rvert | 1.9997 |  0.0022 |
+|      3 | R^2             | 4.5529 |  0.0000 |
+|--------+-----------------+--------+---------|
+
+** Multifig Stuff
+Example of having a multiple, side by side figure is shown here below
+
+#+caption: Sum of iid Uniform Random Variables for N = 2,6,12
+#+name: fig:UniformSubFig
+\begin{figure}
+    \centering
+    \subfloat[label 1]{{\includegraphics[width=0.5\textwidth]{./Images/fig1.jpg} }}
+    \subfloat[label 2]{{\includegraphics[width=0.5\textwidth]{./Images/fig2.jpg} }}
+\end{figure}
+
+
+* Introduction
+some introduction here
+* Simulation and Discussion
+** Simulation Section 1
+
+** Simulation Section 2
+*** Simulation Subsection 1
+
+** Simulation Section 3
+*** Analytical PDF
+
+** Discussion Section
+
+* What was Learned
+Major information
+** Issues and Changes
+etc.

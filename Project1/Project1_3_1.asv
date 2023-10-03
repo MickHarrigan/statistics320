@@ -1,0 +1,55 @@
+bin_edges = [0.5:6.5]; % there are only 6 sides, start 0.5 less than 1 and finish 0.5 more than 6
+Ntrials = [120, 1200 12000 120000]; % per the assignment
+disp(' ');
+disp('Section 3.1 PMF of a single fair die');
+
+for ktrials = 1:length(Ntrials);  %loop on the number of trials
+    
+    %  set a new figure (or figures) for this number of trials
+    
+    rolls = randi(6,1, N); % do the random trials
+    
+    sample_mean = mean(rolls); % compute the sample mean
+    sample_var = var(rolls); % compute the sample variance
+    
+    %Each call to histogram will produce a plot.  You might consider
+    %putting these in separate figures or subplots
+    
+    % These calls are correct, but I won't do it again.  You're CMPEs; you
+    % can figure it out from here
+    
+    %Raw histogram
+    hist_raw=histogram(rolls,'BinEdges',bin_edges); %histogram returns a structure, check it out!
+    
+    %Normalized histogram, note calling parameters
+    hist_norm = histogram(rolls,'BinEdges',bin_edges,'Normalization','probability');
+    
+    
+    hold on;
+    % the theoretical pmf is pk = 1/6, k=1,2,...,6 because the die is fair
+    nchoosek(Ntrials, )
+    plot(); % plot the theoretical
+    hold off;
+    
+    % Professional quality plots always have axes labels
+    xlabel('Number of spots');
+    ylabel('Probability');
+    axis([0 7 0 0.25]);  %...and always have an appropriate scale
+    
+    % ...and always have a title
+    title(['Section 3.1: ',int2str(Ntrials(ktrials)),' rolls of one fair die']);
+    
+    %...and almost always have a grid
+    grid on
+    
+    %...and a legend.
+    legend('Scaled histogram','Prob Mass Fnc (PMF)');
+    disp(['For ',int2str(Ntrials(ktrials)),' sample mean: ',num2str(sample_mean),' sample variance: ',num2str(sample_var)]);
+end; % loop on the trials
+
+mean_th = 3.5; % compute the theoretical mean or average
+var_th = 2.9167; % compute the theoretical variance
+
+disp(['Theoretical mean = ',num2str(mean_th),' theoretical variance: ',num2str(var_th)]);
+disp('-----------');
+disp(' ');

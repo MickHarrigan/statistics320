@@ -1,0 +1,323 @@
+# title, author name, and date for use with each push to pdf
+#+title: *CMPE320 Project 3*
+#+subtitle: *The Central Limit Theorem: The Magic of Large Numbers*
+#+author: Mick Harrigan
+#+date: {{{time(%m/%d/%Y)}}}
+
+# push this to a pdf using
+# SPC m e l p
+
+# sets the sizing to that of the right paper and font size, as well as the general output format (article in this case)
+#+Latex_class: article
+#+Latex_class_options: [a4paper, 11pt]
+# changed the margin size to 0.75in instead of the typical 1.25in
+#+latex_header: \usepackage[margin=.75in]{geometry}
+#+latex_header: \usepackage{amsmath}
+#+latex_header: \usepackage{subfig}
+#+latex_header: \usepackage[demo]{graphicx}
+#+latex_header: \usepackage[nodisplayskipstretch]{setspace}
+\setstretch{1.5}
+
+# removes the table of contents from the output
+#+OPTIONS: toc:nil timestamp:t
+* Useful Information for Writing :noexport:
+** No Indentation / Line Skips
+noindent is used for removing the paragraph indentation that is used on each separated section.
+\noindent
+This is generally preceeded by \bigskip to space things out a little better
+
+
+** Figure Creation
+This is how a figure is created, gives a caption and a name, then a link to the file itself, based on the relative path.
+#+caption: Scatterplot of the values of R using equation 1
+#+name: fig:RScatterplot
+[[./Images/ScatterplotR1.jpg]]
+
+
+it is called through use of the [[]] linking format and using the field in the name section from above.
+
+** Equation Creation
+Uses the latex headers of
+\begin{equation} and \end{equation}
+can be named and captioned with #+name and #+caption like figures above.
+They are automatically numbered (and no numbers can be applied if equation is replaced with equation*)
+
+Inline equations are wrapped with $ characters. Formatting equations can be stolen from former works, or alternatively (and preferably) use something like EqualX
+
+** Table Creation
+Creates a table with name, alignment, caption.
+Inline latex can be used with \ key. DO NOT USE ANYTHING WITH | KEY, BREAKS THE FORMATTING.
+#+caption: Expected values of both random variable S and respective function of R
+#+name: tab:ExpectedVals
+#+ATTR_LATEX: :align |c|c|c|c|
+|--------+-----------------+--------+---------|
+| Method | Function of R   |   E[S] | E[g(R)] |
+|--------+-----------------+--------+---------|
+|      1 | R, R \geq 0     | 1.0010 |  0.0022 |
+|      2 | \lvert R \rvert | 1.9997 |  0.0022 |
+|      3 | R^2             | 4.5529 |  0.0000 |
+|--------+-----------------+--------+---------|
+
+** Multifig Stuff
+Example of having a multiple, side by side figure is shown here below
+
+#+caption: Sum of iid Uniform Random Variables for N = 2,6,12
+#+name: fig:UniformSubFig
+\begin{figure}
+    \centering
+    \subfloat[label 1]{{\includegraphics[width=0.5\textwidth]{./Images/fig1.jpg} }}
+    \subfloat[label 2]{{\includegraphics[width=0.5\textwidth]{./Images/fig2.jpg} }}
+\end{figure}
+
+
+* Introduction
+This project uses different types of random variables to show the effects of the CLT on real datasets.
+The effects of this theorem are simply stated that the sum of many different random variables tends towards a gaussian distribution with a mean equivalent to the sum of the means, and variance equivalent to the sum of the variances. The findings below agree with this notion and are shown as such.
+* Simulation and Discussion
+** Sum of Independent, Identically Distributed Random Variables from $U(0,1)$
+# 3 plots for this
+For the sum of the iid variables in this sample the generalized shape is going to be based on the generation of $100,000$ random numbers between $0$ and $1$. Because of this being a uniform distribution, the analytical mean is found to be $0.5$.
+The variance of the same set of data is found to be $0.833$. With these pieces of information the CLT can be upheld by summing each of the means and variances for each trial of different $N$ values. These are illustrated below in Figure [[fig:UniformSubFig]].
+# page break here for better fitting of the figures to the prose that explains them
+\pagebreak
+
+# Images used for section 1 graphs
+
+#+caption: Sum of iid Uniform Random Variables for N = 2,6,12
+#+name: fig:UniformSubFig
+\begin{figure}
+    \centering
+    \subfloat[Sum of 2 Uniform Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/UniformFig1.jpg} }}
+    \subfloat[Sum of 6 Uniform Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/UniformFig2.jpg} }} \\
+    \subfloat[Sum of 12 Uniform Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/UniformFig3.jpg} }}
+\end{figure}
+
+\noindent
+Given the formerly calulated values of $\mu = 0.5$ and $\sigma^2 = 0.833$, the reflected outputs for different amounts of summed random variables follows suit with the output means and variances being $N$ times $\mu$ and $\sigma^2$ respectively.
+The graphs show this with obvious means of $N$ divided by $2$, and greater variance from the mean as $N$ increases, equivalent to $N$ divided by $12$.
+
+# this is about the gaussian curve plotted over the histograms
+\medskip
+\noindent
+In each graph there is an appropriate Gaussian curve plotted above the histograms. These use the analytical values calulated for the mean and variance to show what the expected output of this function is to be, given that the CLT is true.
+
+# this is about the analytical and measured mean/variance
+\medskip
+\noindent
+The comparison between analytical and measured mean and variance for each of the trials can be summarized below in Table [[tab:UniformTable]].
+
+#+caption: Simulated and Analytical Mean and Variance for each trial of N
+#+name: tab:UniformTable
+#+ATTR_LATEX: :align |c|c|c|c|c|
+|----+-----------------+----------------+---------------------+--------------------|
+|  N | Analytical Mean | Simulated Mean | Analytical Variance | Simulated Variance |
+|----+-----------------+----------------+---------------------+--------------------|
+|  2 |               1 |              1 |              1.6667 |            0.16649 |
+|  6 |               3 |          3.003 |                 0.5 |            0.49669 |
+| 12 |               6 |         6.0008 |                   1 |             1.0008 |
+|----+-----------------+----------------+---------------------+--------------------|
+
+\noindent
+This shows that even given a very small amount of trials the accuracy of the approach to Gaussian is very high. Then, in this case at least, the CLT does hold up. With this distribution the CLT makes sense given that as $N$ increases, thus would the mean, and as there are more values being used as each trial, the relative amount of differences within each point increases as well which leads to a greater variance as well.
+
+
+** Sum of Independent, Identically Distributed Discrete Random Variables
+# 3 plots for this
+The sum of $N$ trials of rolling a fair 8 sided die is going to follow a similar output to that of Section [[Sum of Independent, Identically Distributed Random Variables from $U(0,1)$]]. This is because of the CLT once again and the subfigures of Figure [[fig:DiscreteSubfig]] show this below.
+
+\pagebreak
+#+caption: Sum of iid Discrete Random Variables for N = 2,20,40
+#+name: fig:DiscreteSubfig
+\begin{figure}
+    \centering
+    \subfloat[Sum of 2 Discrete Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/DiscreteFig1.jpg} }}
+    \subfloat[Sum of 20 Discrete Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/DiscreteFig2.jpg} }} \\
+    \subfloat[Sum of 40 Discrete Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/DiscreteFig3.jpg} }}
+\end{figure}
+
+# graph bounds and how they are tied to discrete values
+\noindent
+In Figure [[fig:DiscreteSubfig]] subfigure a, the bounds are most easily seen compared to the other 2 graphs. The low end of the histogram being $2$, and the high end being $16$. These values are important given that there is no way for the max (in the case of $N = 2$) value to be greater than $2 \times 8$, as that is the max value of each die. The same applies to the low end of the histogram in that the minimum value is when each die is at it's minimum, $2 \times 1$.
+
+# how mean and variance are calulated
+\pagebreak
+\noindent
+Given that the distribution of the random variables of $X$ are discrete, the values are inherently between the values of $1$ and $8$. The mean of this variable is found as the probability of each possible outcome times the outcome itself.
+Because this is a fair $8$ sided die, the probability for each side is $1/8$, and the values are the sum of each of the sides, $1+...+8$.
+Thus the following is the expected value of $X$.
+
+#+name: eqn:DiscreteMean
+\begin{flalign}
+    \mu &= \frac{1}{8} \sum_{k=1}^{8}{k} \\
+        &= \frac{1 + 2 + 3 + 4 + 5 + 6 + 7 + 8}{8} \\
+        &= \frac{36}{8} \rightarrow 4.5
+\end{flalign}
+
+\noindent
+Finding the variance of the same random variable can be done through subtracting the square of the mean from the mean square.
+
+\begin{equation}
+    \sigma^2 = E[X^2] - (E[X]^2)
+\end{equation}
+
+\noindent
+Calculating the mean square is similar to the process of the mean, shown in Equation [[eqn:DiscreteMean]]. This calculation is shown below.
+
+#+name: eqn:DiscreteMeanSquare
+\begin{flalign}
+    E[X^2]  &= \frac{1}{8} \sum_{k=1}^{8}{k^2} \\
+            &= \frac{1^2 + 2^2 + 3^2 + 4^2 + 5^2 + 6^2 + 7^2 + 8^2}{8}  \\
+            &= \frac{204}{8} \rightarrow 25.5
+\end{flalign}
+
+
+\noindent
+With both the mean and the mean square, the variance is thus found as shown in Equation [[eqn:DiscreteVar]].
+
+# the newlines and & do nothing here but make it look alright when its printed
+#+name: eqn:DiscreteVar
+\begin{equation}
+    \sigma^2    &= E[X^2] - (E[X]^2) \\
+                &= 25.5 - (4.5)^2 \\
+                &= 5.25
+\end{equation}
+
+# gaussian plot on top of histogram
+\noindent
+Using both the calculated mean and variance in Equations [[eqn:DiscreteMean]] and [[eqn:DiscreteVar]], the analytical function for each value of $N$ multiplies $N$ by the mean and variance to find the applicable mean and variance, as stated by the CLT.
+Once again, in each subfigure of Figure [[fig:DiscreteSubfig]] this is seen as the mean for each is $4.5$ times $N$, and each having a greater and greater range of output values due to the increases in each mean and variance of the different $N$ values.
+
+# analytical and measured mean/variance stuff
+# make a table for this shit
+\medskip
+\noindent
+With the data generated, comparing the calculated and analytical values leads to a similar conclusion to that from Section [[Sum of Independent, Identically Distributed Random Variables from $U(0,1)$]], as seen below in Table [[tab:DiscreteTab]].
+
+#+caption: Simulated and Analytical Mean and Variance for each trial of N
+#+name: tab:DiscreteTab
+#+ATTR_LATEX: :align |c|c|c|c|c|
+|----+-----------------+----------------+---------------------+--------------------|
+|  N | Analytical Mean | Simulated Mean | Analytical Variance | Simulated Variance |
+|----+-----------------+----------------+---------------------+--------------------|
+|  2 |               9 |         8.9955 |                10.5 |            10.5242 |
+| 20 |              90 |        89.9882 |                 105 |            104.471 |
+| 40 |             180 |       179.9561 |                 210 |           210.4184 |
+|----+-----------------+----------------+---------------------+--------------------|
+
+** Sum of Independent, Identically Distributed Random Variables from $p_X(x)=0.5e^{-0.5x}$
+# 3 plots for this
+This case uses a much more different function to show the breadth of the CLT's applications. The past 2 random variables have been generally simple and not following a real function, unlike the current case.
+The function for this case is $p_X(x)=0.5e^{-0.5x}$, and upon initial thought the past events might not seem as probable.
+This worry is denied below in Figure [[fig:ExpSubFig]].
+
+\pagebreak
+#+caption: Sum of iid Exponential Random Variables for N = 5,50,150
+#+name: fig:ExpSubFig
+\begin{figure}
+    \centering
+    \subfloat[Sum of 5 Exponential Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/ExpFig1.jpg} }}
+    \subfloat[Sum of 50 Exponential Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/ExpFig2.jpg} }} \\
+    \subfloat[Sum of 150 Exponential Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/ExpFig3.jpg} }}
+\end{figure}
+
+# bounds of graphs
+\medskip
+\noindent
+Contrasting this case to that of the former in Sections [[Sum of Independent, Identically Distributed Random Variables from $U(0,1)$]] and [[Sum of Independent, Identically Distributed Discrete Random Variables]] where after just a small amount of sums the analytical and simulated outputs are very very close.
+With this case there is a much larger difference that takes many more iterations to reach something that is more like the analytical shown as the orange line.
+
+# bounds
+\noindent
+In each subfigure of Figure [[fig:ExpSubFig]] there is a discontinuity at $Y = 0$, as that is an artifact similar to that of the previous section, where the sum of $N$ random variables cannot go below $0$ as there are bounds on the domain of the defining function.
+
+# calculation of mean and variance
+\medskip
+\noindent
+The mean of an exponential distribution is commonly known as $\displaystyle\frac{1}{\lambda}$, and similarly the variance is known as $\displaystyle\frac{1}{\lambda^2}$. In each case shown in Figure [[fig:ExpSubFig]], these common values are multiplied by the corresponding value of $N$.
+This shows the connection and use of the CLT in this case.
+
+# gaussian plot on top of histogram
+\medskip
+\noindent
+The Gaussian plot overlayed on the histograms uses the above common mean and variance to calculate each specific mean and variance. In each case, as $N$ gets larger the approximation is better and better, leading to a more accurate description.
+
+# mean and variance that were calculated from the graphs
+\medskip
+\noindent
+The mean and variance are calculated using the methods similar to those in the previous sections. The analytical and the simulated values of each are enumerated below in Table [[tab:ExpTable]].
+
+#+caption: Simulated and Analytical Mean and Variance for each trial of N
+#+name: tab:ExpTable
+#+ATTR_LATEX: :align |c|c|c|c|c|
+|-----+-----------------+----------------+---------------------+--------------------|
+|   N | Analytical Mean | Simulated Mean | Analytical Variance | Simulated Variance |
+|-----+-----------------+----------------+---------------------+--------------------|
+|   5 |              10 |         9.9853 |                  20 |            20.0472 |
+|  50 |             100 |        99.9916 |                 200 |           198.3358 |
+| 150 |             300 |       299.9169 |                 600 |           598.6283 |
+|-----+-----------------+----------------+---------------------+--------------------|
+
+
+
+** Sum of Independent, Identically Distributed Bernoulli Trials
+# 3 plots for this (2 subplots per window though)
+This simulation is described as the sum of $N$ iid Bernoulli trials. This is also known as a Binomial distribution with the form $p^k(1-p)^{N-k}$, where $N$ in this case is the same as $N$ for the trials, and $k$ is equivalent to the specific value within $N$ that is being focused at the time.
+The CLT still holds again in this case as the same situations reoccurred. Thus, in each graph of each subfigure of Figure [[fig:BernSubFig]] both the PMF and PDF of each is shown.
+
+\pagebreak
+#+caption: Sum of iid Bernoulli Random Variables for N = 4,8,40
+#+name: fig:BernSubFig
+\begin{figure}
+    \centering
+    \subfloat[Sum of 4 Bernoulli Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/BernFig1.jpg} }}
+    \subfloat[Sum of 8 Bernoulli Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/BernFig2.jpg} }} \\
+    \subfloat[Sum of 40 Bernoulli Distributions]{{\includegraphics[width=0.5\textwidth]{./Images/BernFig3.jpg} }}
+\end{figure}
+
+
+# talk about the pmf and pdf
+\medskip
+\noindent
+In each subfigure of Figure [[fig:BernSubFig]] there is both the PDF and PMF of the given functions. There is little difference overall for each given that each histogram bin is the index of the first $1$ being found within the generated trials. Thus, the PDF can only have an effective output when the bin width is $1$ as well.
+Either way, the PMF is a Binomial distribution based on being the sum of $N$ trials of a Bernoulli simulation. In this case the given $p$ is $0.5$, thus giving an equal chance of $0$ or $1$.
+Building on this, the Gaussian distribution in this case is shown to be the same as the Binomial for the given data (this point is also shown in the attached code).
+
+# mean and variance calculated
+\medskip
+\noindent
+The mean and variance of a Bernoulli distribution is given just as $p$ for the mean, and $p(1-p)$ for variance. Using the value of $p$ provided the analytical values are $0.5$ and $0.25$ respectively.
+These values are then multiplied by the value of $N$ for each case, just the same as each of the other simulations.
+In each subfigure of Figure [[fig:BernSubFig]] the mean is very obviously placed at $0.5 \times N$ and as $N$ grows, the variance increases as expected. This shows once again the CLT holds true.
+
+
+# calculated mean and variance vs simulated mean and variance
+\medskip
+\noindent
+As stated above, the mean and variance were calculated as expected from the same methods as in each other section. The simulated values are compared against these analytical values in the below Table [[tab:BernTable]].
+
+#+caption: Simulated and Analytical Mean and Variance for each trial of N
+#+name: tab:BernTable
+#+ATTR_LATEX: :align |c|c|c|c|c|
+|----+-----------------+----------------+---------------------+--------------------|
+|  N | Analytical Mean | Simulated Mean | Analytical Variance | Simulated Variance |
+|----+-----------------+----------------+---------------------+--------------------|
+|  4 |               2 |         1.9992 |                   1 |              1.002 |
+|  8 |               4 |         4.0049 |                   2 |             1.9972 |
+| 40 |              20 |        20.0069 |                  10 |             10.055 |
+|----+-----------------+----------------+---------------------+--------------------|
+
+
+* What was Learned
+This project entirely focuses on the CLT. Given this, the differences in each section are mostly superficial. This is due to the same, or a similar outcome, being the output of each section. That is the point of it all, but reinforces the idea of what the CLT is doing. The differences that are there between the functions comes more from the generation and the summation of the random variables, which makes sense, then the graphing is meant to show what the outcome of this is. Some of this seemingly gets obfuscated in the process, this is mostly seen in Sections [[Sum of Independent, Identically Distributed Random Variables from $p_X(x)=0.5e^{-0.5x}$]] and [[Sum of Independent, Identically Distributed Bernoulli Trials]].
+What I mean by this is that there is some amount of the process that is a little vague just due to the conversion of Bernoulli to Gaussian/Binomial.
+
+\medskip
+\noindent
+With all of this being said, the applications of the CLT is very obvious, in that as the amount of something increases, the mean increases along with it, as well as the variance, but the general shape is going to get closer and closer to a Gaussian distribution, which is generally very easy to approach and work with.
+** Issues and Changes
+In the process of doing this project the only real issue that was had was the somewhat vagueness of the last section in what actually is happening. Though, this is not really an issue with the actual project and more of an issue wrapping my head around the process itself. The outcome still generally makes sense from working with the data and the graphs.
+Other than this, there is little that I feel that needs to be changed, the functions used to generate the different random variables feel like a good choice, and that they are different enough that general intuition can't be entirely trusted to find the result from that alone.
+
+\medskip
+\noindent
+The amount of time that I spent on this project is somewhere in the ballpark of about $10$ hours. This includes the writing of the document and the execution of the code. Overall, not the hardest project that has happened yet, but a much more straightforward view on what is occuring and being done.

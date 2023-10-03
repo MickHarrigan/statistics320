@@ -1,0 +1,884 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>S22_CMPE320_Proj1_skeleton</title><meta name="generator" content="MATLAB 9.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-02-28"><meta name="DC.source" content="S22_CMPE320_Proj1_skeleton.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">3.1 PMF for a single die</a></li><li><a href="#3">Section 3.2 PMF for binary strings</a></li><li><a href="#4">Section 3.3 exponentially distributed</a></li><li><a href="#5">Section 3.4  N(0,1)</a></li><li><a href="#6">Section 3.5  N(-2,9)</a></li><li><a href="#7">Section 3.6</a></li></ul></div><pre class="codeinput"><span class="comment">% S21 CMPE320 Project 1 Skeleton</span>
+<span class="comment">%    Histograms, PDFs and PMFs</span>
+<span class="comment">%    EFCL   1/14/2022</span>
+<span class="comment">%</span>
+close <span class="string">all</span>  <span class="comment">% remove all existing figures (very useful to avoid confusion)</span>
+clear      <span class="comment">% remove all existing variables, but not existing break points in scripts or functions</span>
+</pre><h2 id="2">3.1 PMF for a single die</h2><pre class="codeinput"><span class="comment">%bin_edges contain the upper and lower edges for the histogram that we will</span>
+<span class="comment">%create. Therefore, it always has one more column than the number of bins,</span>
+<span class="comment">%with the upper edge of one bin corresponding to the lower edge of the</span>
+<span class="comment">%next.</span>
+
+bin_edges = [0.5:6.5]; <span class="comment">% there are only 6 sides, start 0.5 less than 1 and finish 0.5 more than 6</span>
+Ntrials = [120, 1200 12000 120000]; <span class="comment">% per the assignment</span>
+disp(<span class="string">' '</span>);
+disp(<span class="string">'Section 3.1 PMF of a single fair die'</span>);
+figure();
+
+<span class="keyword">for</span> ktrials = 1:length(Ntrials);  <span class="comment">%loop on the number of trials</span>
+
+    <span class="comment">%  set a new figure (or figures) for this number of trials</span>
+    subplot(2,2,ktrials);
+
+    rolls = randi(6,1, Ntrials(ktrials)); <span class="comment">% do the random trials</span>
+
+    sample_mean = mean(rolls); <span class="comment">% compute the sample mean</span>
+    sample_var = var(rolls); <span class="comment">% compute the sample variance</span>
+
+    <span class="comment">%Each call to histogram will produce a plot.  You might consider</span>
+    <span class="comment">%putting these in separate figures or subplots</span>
+
+    <span class="comment">% These calls are correct, but I won't do it again.  You're CMPEs; you</span>
+    <span class="comment">% can figure it out from here</span>
+
+    <span class="comment">%Raw histogram</span>
+    hist_raw=histogram(rolls,<span class="string">'BinEdges'</span>,bin_edges); <span class="comment">%histogram returns a structure, check it out!</span>
+
+    <span class="comment">%Normalized histogram, note calling parameters</span>
+    hist_norm = histogram(rolls,<span class="string">'BinEdges'</span>,bin_edges,<span class="string">'Normalization'</span>,<span class="string">'probability'</span>);
+
+
+    hold <span class="string">on</span>;
+    <span class="comment">% the theoretical pmf is pk = 1/6, k=1,2,...,6 because the die is fair</span>
+    <span class="comment">%plot(1/6); % plot the theoretical ! This function didn't do what it</span>
+    <span class="comment">%was supposed to</span>
+    yline(1/6, <span class="string">'color'</span>, <span class="string">'g'</span>, <span class="string">'LineWidth'</span>, 3);
+    hold <span class="string">off</span>;
+
+    <span class="comment">% Professional quality plots always have axes labels</span>
+    xlabel(<span class="string">'Number of dots'</span>);
+    ylabel(<span class="string">'Probability'</span>);
+    axis([0 7 0 0.25]);  <span class="comment">%...and always have an appropriate scale</span>
+
+    <span class="comment">% ...and always have a title</span>
+    title([<span class="string">'Subplot '</span>, int2str(ktrials), <span class="string">': N = '</span>, int2str(Ntrials(ktrials))]);
+
+    <span class="comment">%...and almost always have a grid</span>
+    grid <span class="string">on</span>
+
+    <span class="comment">%...and a legend.</span>
+    legend(<span class="string">'Scaled histogram'</span>,<span class="string">'Prob Mass Fnc (PMF)'</span>);
+    disp([<span class="string">'For '</span>,int2str(Ntrials(ktrials)),<span class="string">' sample mean: '</span>,num2str(sample_mean),<span class="string">' sample variance: '</span>,num2str(sample_var)]);
+<span class="keyword">end</span>; <span class="comment">% loop on the trials</span>
+
+sgtitle(<span class="string">'Section 3.1 N rolls of a fair die'</span>);
+
+mean_th = 3.5; <span class="comment">% compute the theoretical mean or average</span>
+var_th = 2.9167; <span class="comment">% compute the theoretical variance</span>
+
+disp([<span class="string">'Theoretical mean = '</span>,num2str(mean_th),<span class="string">' theoretical variance: '</span>,num2str(var_th)]);
+disp(<span class="string">'-----------'</span>);
+disp(<span class="string">' '</span>);
+
+<span class="comment">% account for the fact that you want separate plots for each section</span>
+</pre><pre class="codeoutput"> 
+Section 3.1 PMF of a single fair die
+For 120 sample mean: 3.6417 sample variance: 2.9546
+For 1200 sample mean: 3.5158 sample variance: 2.9806
+For 12000 sample mean: 3.5202 sample variance: 2.926
+For 120000 sample mean: 3.4952 sample variance: 2.9237
+Theoretical mean = 3.5 theoretical variance: 2.9167
+-----------
+ 
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_01.png" alt=""> <h2 id="3">Section 3.2 PMF for binary strings</h2><pre class="codeinput">disp(<span class="string">' '</span>);
+disp(<span class="string">'Section 3.2 PMF for Binary String'</span>);
+
+<span class="comment">% Don't forget new figures</span>
+
+n = 100;  <span class="comment">% number of columns = length of binary string</span>
+Ntrials = [100 1000 10000];  <span class="comment">% diffent number of trials, per assignment</span>
+p1 = [0.5 0.9 0.1];  <span class="comment">% different values of p1 given in the assignement</span>
+bins_edges = [0.5:100.5]; <span class="comment">% fill in the correct edges</span>
+
+<span class="comment">% set up storage for random variable statistics (small "s")</span>
+outTable = zeros(length(Ntrials), length(p1));
+
+<span class="keyword">for</span> ktrials = 1:length(Ntrials)
+
+    <span class="comment">% Each trial consists of 100 digits</span>
+    random_numbers = rand(Ntrials(ktrials),100);  <span class="comment">%</span>
+
+    <span class="comment">% Do you need a new figure?</span>
+    figure();
+
+
+    <span class="keyword">for</span> kp = 1:length(p1) <span class="comment">%loop on values of p1</span>
+
+        subplot(3,1,kp);
+        work = (random_numbers&lt;=p1(kp)); <span class="comment">% set to 1's and zeros using p1</span>
+        <span class="comment">% think about how this works! It's a useful trick that you will</span>
+        <span class="comment">% need in later projects</span>
+
+        data = zeros(1,100); <span class="comment">% initialize location of first 1 in each sample</span>
+        <span class="keyword">for</span> kn = 1:Ntrials(ktrials)  <span class="comment">% for each of the 100 element samples</span>
+
+            <span class="comment">% This code finds the location of the first one, or, if there</span>
+            <span class="comment">% are no ones, establishes 101 as the index</span>
+            i1 = find(work(kn,:)==1); <span class="comment">% find all of the 1's</span>
+            <span class="keyword">if</span> length(i1)==0  <span class="comment">% if there are none</span>
+                data(kn)=n+1; <span class="comment">%    indicate beyond end of sequence</span>
+            <span class="keyword">else</span>
+                data(kn)=min(i1);<span class="comment">% otherwise take the first 1</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">% Generate the raw histogram for this sequence</span>
+        hist_raw=histogram(data, <span class="string">'BinEdges'</span>, bins_edges);
+        <span class="comment">% Generate the scaled histogram for this sequence</span>
+        <span class="comment">%   Use 'Normalization','probability' again, because this is</span>
+        <span class="comment">%   a PMF</span>
+        hist_norm=histogram(data, <span class="string">'BinEdges'</span>, bins_edges, <span class="string">'Normalization'</span>, <span class="string">'probability'</span>);
+
+        <span class="comment">% Determine the theoretical geometric PMF and plot it on the same</span>
+        <span class="comment">% axes as the normalized PMF</span>
+        k = (0:100);
+        theoretical_pmf = (1 - p1(kp)).^k * p1(kp);
+
+        hold <span class="string">on</span>;
+        stem(k, theoretical_pmf);
+        hold <span class="string">off</span>;
+
+        xlim([0 50]);
+
+        <span class="comment">% Label your plots.  If you use subplots, and all subplots have the</span>
+        <span class="comment">% same x-axis, you can label the x-axis of only the lowest subplot in each</span>
+        <span class="comment">% column of plots</span>
+        xlabel(<span class="string">"Bits Until First 1 Appearance"</span>);
+        ylabel(<span class="string">"Probability of First Appearance"</span>);
+        legend(<span class="string">'Scaled histogram'</span>, <span class="string">'Prob Mass Fnc (PMF)'</span>);
+        title([<span class="string">'Subplot '</span>, int2str(kp), <span class="string">': p = '</span>, num2str(p1(kp))]);
+        <span class="comment">%title(['Section 3.2: ', int2str(Ntrials(ktrials)), ' index of first binary 1 in string for p: ', num2str(p1(kp))]);</span>
+        <span class="comment">%Compute and the sample mean and variance</span>
+        sample_mean = mean(data);
+        sample_var = var(data);
+
+        <span class="comment">%Compute and save the population mean and variance</span>
+        pop_mean = 1/p1(kp);
+        pop_var = (1 - p1(kp)) / (p1(kp)^2);
+        disp([<span class="string">'For '</span>, int2str(Ntrials(ktrials)), <span class="keyword">...</span>
+            <span class="string">' with p: '</span>, num2str(p1(kp)), <span class="string">', sample mean: '</span>, <span class="keyword">...</span>
+            num2str(sample_mean), <span class="string">' sample variance: '</span>, num2str(sample_var), <span class="keyword">...</span>
+            <span class="string">' population mean: '</span>, num2str(pop_mean), <span class="keyword">...</span>
+            <span class="string">' and population variance: '</span>, num2str(pop_var)]);
+
+        <span class="comment">% Do whatever bookkeeping or housekeeping you need to do at the end of the loop</span>
+        <span class="comment">% combine means and vars into single group</span>
+        values = [sample_mean, sample_var, pop_mean, pop_var];
+        sgtitle([<span class="string">'Section 3.2: Index of First Binary 1 in String for N = '</span>, int2str(Ntrials(ktrials))]);
+        grid <span class="string">on</span>;
+
+    <span class="keyword">end</span> <span class="comment">% loop on p1</span>
+
+<span class="keyword">end</span>
+
+<span class="comment">% Display the means and variances in a way that makes sense for you,</span>
+<span class="comment">% because you have to report them in the Project report.</span>
+
+
+disp(<span class="string">'-----------'</span>);
+disp(<span class="string">' '</span>);
+</pre><pre class="codeoutput"> 
+Section 3.2 PMF for Binary String
+For 100 with p: 0.5, sample mean: 1.99 sample variance: 2.1312 population mean: 2 and population variance: 2
+For 100 with p: 0.9, sample mean: 1.07 sample variance: 0.065758 population mean: 1.1111 and population variance: 0.12346
+For 100 with p: 0.1, sample mean: 10.6 sample variance: 110.7677 population mean: 10 and population variance: 90
+For 1000 with p: 0.5, sample mean: 2.037 sample variance: 1.8415 population mean: 2 and population variance: 2
+For 1000 with p: 0.9, sample mean: 1.14 sample variance: 0.15656 population mean: 1.1111 and population variance: 0.12346
+For 1000 with p: 0.1, sample mean: 10.106 sample variance: 83.1539 population mean: 10 and population variance: 90
+For 10000 with p: 0.5, sample mean: 1.9964 sample variance: 1.9974 population mean: 2 and population variance: 2
+For 10000 with p: 0.9, sample mean: 1.1089 sample variance: 0.12505 population mean: 1.1111 and population variance: 0.12346
+For 10000 with p: 0.1, sample mean: 9.9726 sample variance: 88.0689 population mean: 10 and population variance: 90
+-----------
+ 
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_02.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_03.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_04.png" alt=""> <h2 id="4">Section 3.3 exponentially distributed</h2><pre class="codeinput">disp(<span class="string">' '</span>);
+disp(<span class="string">'Section 3.3 Exponentially Distributed'</span>);
+
+<span class="comment">% Set up new plots as necessary.  Remember, you need ALL of the plots</span>
+
+
+Ntrials = [10 1000 100000]; <span class="comment">%set according to the assignment</span>
+lambda = 0.5;  <span class="comment">% as given in the assignment</span>
+
+theory_m =  1/lambda;   <span class="comment">% analytical or population mean == mu</span>
+theory_v = 1/(lambda^2); <span class="comment">% analytical or population variance == sigma^2</span>
+<span class="keyword">for</span> ktrials = 1:length(Ntrials)   <span class="comment">% repeat for each number of trials</span>
+
+      figure();
+      <span class="comment">% Set the bin edges</span>
+      bins_edges = [0.5: 20.5];
+
+      <span class="comment">% Generate the appropriate number of independent random trials</span>
+      data = randx(1,Ntrials(ktrials),lambda); <span class="comment">% randx is given</span>
+
+      <span class="comment">% Compute (and plot) the raw histogram</span>
+      hist_raw = histogram(data, <span class="string">'BinEdges'</span>, bins_edges);
+
+      <span class="comment">% used to compute the scaling factor</span>
+      <span class="comment">%hist_raw = histogram(data, 40, 'BinLimits', [0.5 20.5]);</span>
+
+      <span class="comment">% Compute (and plot) the normalized histogram</span>
+      <span class="comment">%    Use 'Normalization','pdf' because an exponential RV is a</span>
+      <span class="comment">%    continuous random variable and has a pdf, not a pmf.</span>
+      hist_norm = histogram(data, <span class="string">'BinEdges'</span>, bins_edges, <span class="string">'Normalization'</span>, <span class="string">'pdf'</span>);
+
+      <span class="comment">% used to compute the scaling factor with the line above</span>
+      <span class="comment">%hist_norm = histogram(data, 40, 'BinLimits', [0.5 20.5], 'Normalization', 'pdf');</span>
+
+      <span class="comment">% Compute and plot the true pdf on the same axes as the normalized</span>
+      <span class="comment">% histogram</span>
+      k = (0:20);
+      theoretical_pdf = lambda * exp(-lambda * k);
+      hold <span class="string">on</span>;
+      plot(k, theoretical_pdf);
+      hold <span class="string">off</span>;
+
+      <span class="comment">% Compute the sample mean and variance and display them</span>
+      sample_mean = mean(data);
+      sample_var = var(data);
+
+      <span class="comment">% labels and titles</span>
+      xlabel(<span class="string">'Input'</span>);
+      ylabel(<span class="string">'Probability'</span>);
+      title([<span class="string">'Section 3.3: N = '</span>, int2str(Ntrials(ktrials)), <span class="string">' Probability Density Function'</span>]);
+      legend(<span class="string">'Scaled Histogram'</span>, <span class="string">'Theoretical Prob Density Fnc (PDF)'</span>);
+
+      <span class="comment">% Either compare the sample mean and variance with the population</span>
+      <span class="comment">% mean and variance, or save the results to output later</span>
+      disp([<span class="string">'For N = '</span>, int2str(Ntrials(ktrials)), <span class="keyword">...</span>
+          <span class="string">', sample and population mean are '</span>, num2str(sample_mean), <span class="keyword">...</span>
+          <span class="string">' &amp; '</span>, num2str(theory_m), <span class="keyword">...</span>
+          <span class="string">' with sample and population variance '</span>, num2str(sample_var), <span class="keyword">...</span>
+          <span class="string">' &amp; '</span>, num2str(theory_v)]);
+<span class="keyword">end</span>;
+
+<span class="comment">%Compare the sample mean and variance to the population mean and variance</span>
+<span class="comment">%as requested</span>
+
+disp(<span class="string">'-----------'</span>);
+disp(<span class="string">' '</span>);
+</pre><pre class="codeoutput"> 
+Section 3.3 Exponentially Distributed
+For N = 10, sample and population mean are 2.1958 &amp; 2 with sample and population variance 4.6434 &amp; 4
+For N = 1000, sample and population mean are 1.8922 &amp; 2 with sample and population variance 3.7739 &amp; 4
+For N = 100000, sample and population mean are 2.0025 &amp; 2 with sample and population variance 4.0252 &amp; 4
+-----------
+ 
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_05.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_06.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_07.png" alt=""> <h2 id="5">Section 3.4  N(0,1)</h2><pre class="codeinput">disp(<span class="string">' '</span>);
+disp(<span class="string">'Section 3.4 Samples from N(0,1)'</span>);
+
+Ntrials = [10 1000 100000];  <span class="comment">% number of trials per assignment</span>
+
+<span class="comment">% Theoretical (analytical) (population) mean and variance</span>
+theory_m = 0;  <span class="comment">% given in assignment</span>
+theory_v = 1;  <span class="comment">% given in assignement</span>
+
+<span class="keyword">for</span> ktrials = 1:length(Ntrials)  <span class="comment">% loop on the different number of trials</span>
+      figure();
+      <span class="comment">% Set the bin edges</span>
+      bin_edges = [-10.5:10.5];
+      <span class="comment">% Generate the random data</span>
+      data = randn(1,Ntrials(ktrials)); <span class="comment">% function randn gives samples from N(0,1) by definition</span>
+
+      <span class="comment">% Compute the raw histogram</span>
+      hist_raw = histogram(data, <span class="string">'BinEdges'</span>, bin_edges);
+
+      <span class="comment">% Compute the normalized histogram with pdf normalization</span>
+      hist_norm = histogram(data, <span class="string">'BinEdges'</span>, bin_edges, <span class="string">'Normalization'</span>, <span class="string">'pdf'</span>);
+
+      <span class="comment">% Compute the theoretical pdf and plot on same axes as normalized</span>
+      b = (-10:10);
+      pdf = exp(-(b-theory_m).^2/(2*theory_v))/sqrt(2*pi*theory_v);
+      hold <span class="string">on</span>;
+      plot(b, pdf);
+      hold <span class="string">off</span>;
+
+      <span class="comment">% label and title</span>
+      xlabel(<span class="string">'Input'</span>);
+      ylabel(<span class="string">'Density of Distribution'</span>);
+      title([<span class="string">'Section 3.4 N = '</span>, num2str(Ntrials(ktrials)), <span class="string">' Gaussian Probability Density Function'</span>]);
+      legend(<span class="string">'Scaled Histogram'</span>, <span class="string">'Theoretical Prob Density Fnc (PDF)'</span>);
+
+      <span class="comment">% Compute the sample mean and variance and either save or print</span>
+
+      sample_m = mean(data);
+      sample_v = var(data);
+      disp([<span class="string">'For N = '</span>, num2str(Ntrials(ktrials)), <span class="keyword">...</span>
+          <span class="string">' sample mean and variance are '</span>, num2str(sample_m), <span class="keyword">...</span>
+          <span class="string">' &amp; '</span> , num2str(sample_v)]);
+
+<span class="keyword">end</span>;
+disp([<span class="string">'Theoretical mean and variance '</span>, num2str(theory_m), <span class="string">' &amp; '</span>, num2str(theory_v)]);
+
+disp(<span class="string">'-----------'</span>);
+disp(<span class="string">' '</span>);
+</pre><pre class="codeoutput"> 
+Section 3.4 Samples from N(0,1)
+For N = 10 sample mean and variance are 0.075549 &amp; 0.56946
+For N = 1000 sample mean and variance are 0.0096594 &amp; 0.97414
+For N = 100000 sample mean and variance are 0.0012593 &amp; 0.99711
+Theoretical mean and variance 0 &amp; 1
+-----------
+ 
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_08.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_09.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_10.png" alt=""> <h2 id="6">Section 3.5  N(-2,9)</h2><pre class="codeinput">disp(<span class="string">' '</span>);
+disp(<span class="string">'Section 3.5 Samples from N(-2,9)'</span>);
+
+<span class="comment">% Set the number of trials and the theoretical mean and variance</span>
+Ntrials = [10 1000 100000];
+theory_m = -2;
+theory_v = 9;
+
+<span class="keyword">for</span> ktrials = 1:length(Ntrials) <span class="comment">% loop on the number of trials</span>
+
+      figure();
+      <span class="comment">% Set the bin edges</span>
+      bin_edges = [-15.5:15.5];
+
+      <span class="comment">% Create the data. Note that for N(m,s2) instead of N(0,1),</span>
+      <span class="comment">% we use  sqrt(s2)*randn + m.  You might ask yourself "why this</span>
+      <span class="comment">% formula?"</span>
+      <span class="comment">% I won't say this again, but you will need it in future projects</span>
+
+      data = sqrt(theory_v)*randn(1,Ntrials(ktrials))+theory_m; <span class="comment">% samples from N(0,1) by definition</span>
+
+      <span class="comment">% Compute and plot both histograms on different subplots or figures</span>
+      hist_raw = histogram(data, <span class="string">'BinEdges'</span>, bin_edges);
+
+      hist_norm = histogram(data, <span class="string">'BinEdges'</span>, bin_edges, <span class="string">'Normalization'</span>, <span class="string">'pdf'</span>);
+
+      <span class="comment">% theoretical pdf function</span>
+      b = [-15:15];
+      pdf = exp(-(b-theory_m).^2/(2*theory_v))/sqrt(2*pi*theory_v);
+      hold <span class="string">on</span>;
+      plot(b, pdf);
+      hold <span class="string">off</span>;
+
+      <span class="comment">% label and title stuff</span>
+      xlabel(<span class="string">'Input'</span>);
+      ylabel(<span class="string">'Density of Distribution'</span>);
+      title([<span class="string">'Section 3.4 N = '</span>, num2str(Ntrials(ktrials)), <span class="string">' Gaussian Probability Density Function'</span>]);
+      legend(<span class="string">'Scaled Histogram'</span>, <span class="string">'Theoretical Prob Density Fnc (PDF)'</span>);
+
+      <span class="comment">% Compute the sample mean and variance and display or save as</span>
+      <span class="comment">% necessary</span>
+      sample_mean = mean(data);
+      sample_var = var(data);
+      disp([<span class="string">'For N = '</span>, num2str(Ntrials(ktrials)), <span class="keyword">...</span>
+          <span class="string">' sample mean and variance are '</span>, num2str(sample_mean), <span class="keyword">...</span>
+          <span class="string">' &amp; '</span> , num2str(sample_var)]);
+
+<span class="keyword">end</span>;
+disp([<span class="string">'Theoretical mean and variance '</span>, num2str(theory_m), <span class="string">' &amp; '</span>, num2str(theory_v)]);
+
+<span class="comment">% Display results as necessary</span>
+
+disp(<span class="string">'-----------'</span>);
+disp(<span class="string">' '</span>);
+</pre><pre class="codeoutput"> 
+Section 3.5 Samples from N(-2,9)
+For N = 10 sample mean and variance are -2.476 &amp; 13.6932
+For N = 1000 sample mean and variance are -2.0988 &amp; 8.3816
+For N = 100000 sample mean and variance are -2.0027 &amp; 8.9711
+Theoretical mean and variance -2 &amp; 9
+-----------
+ 
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_11.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_12.png" alt=""> <img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_13.png" alt=""> <h2 id="7">Section 3.6</h2><pre class="codeinput">disp(<span class="string">' '</span>);
+disp([<span class="string">'Section 3.6 Computing Probabilities from PDF'</span>]);
+
+Ntrials = [10 1000 100000];
+theory_m = -2;
+theory_v = 9;
+
+data = sqrt(theory_v)*randn(1,Ntrials(3))+theory_m;
+bin_edges = [-15.5:15.5];
+
+hist_raw = histogram(data, <span class="string">'BinEdges'</span>, bin_edges);
+<span class="comment">% Estimate the requested probability using the raw histogram from 3.5</span>
+<span class="comment">%   This is a sum followed by a division</span>
+ix = find((hist_raw.BinEdges &gt;= -5) &amp; (hist_raw.BinEdges &lt;= 1));
+raw_sum = sum(hist_raw.Values(ix));
+raw_prob = raw_sum / Ntrials(3);
+
+<span class="comment">% Estimate the required probability using the normalized histogram from 3.5</span>
+<span class="comment">% above.  This is equivalent to a Riemann sum from Calc II</span>
+hist_norm = histogram(data, <span class="string">'BinEdges'</span>, bin_edges, <span class="string">'Normalization'</span>, <span class="string">'pdf'</span>);
+ix = find((hist_norm.BinEdges &gt;= -5) &amp; (hist_norm.BinEdges &lt;= 1));
+norm_prob = sum(hist_norm.Values(ix));
+disp([<span class="string">'Section 3.6 N = '</span>, int2str(Ntrials(3)), <span class="string">' with probability of [-5, 1] (raw): '</span>, num2str(raw_prob), <span class="string">' and (norm): '</span>, num2str(norm_prob)]);
+
+<span class="comment">% Estimate the required probability by integration.  Hint: you could use</span>
+<span class="comment">% the Q function!</span>
+mu = theory_m;
+var = theory_v;
+func = @(x) (1/sqrt(2*pi*var)) * exp(-(x - mu).^2 / (2 * var));
+q = integral(func, -5, 1);
+
+disp([<span class="string">'Numerical integration of PDF: '</span>, num2str(q)]);
+
+<span class="comment">% That's it, you're done!</span>
+</pre><pre class="codeoutput"> 
+Section 3.6 Computing Probabilities from PDF
+Section 3.6 N = 100000 with probability of [-5, 1] (raw): 0.67639 and (norm): 0.67639
+Numerical integration of PDF: 0.68269
+</pre><img vspace="5" hspace="5" src="S22_CMPE320_Proj1_skeleton_14.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% S21 CMPE320 Project 1 Skeleton
+%    Histograms, PDFs and PMFs
+%    EFCL   1/14/2022
+%
+close all  % remove all existing figures (very useful to avoid confusion)
+clear      % remove all existing variables, but not existing break points in scripts or functions
+
+%% 3.1 PMF for a single die
+
+%bin_edges contain the upper and lower edges for the histogram that we will
+%create. Therefore, it always has one more column than the number of bins,
+%with the upper edge of one bin corresponding to the lower edge of the
+%next.
+
+bin_edges = [0.5:6.5]; % there are only 6 sides, start 0.5 less than 1 and finish 0.5 more than 6
+Ntrials = [120, 1200 12000 120000]; % per the assignment
+disp(' ');
+disp('Section 3.1 PMF of a single fair die');
+figure();
+
+for ktrials = 1:length(Ntrials);  %loop on the number of trials
+    
+    %  set a new figure (or figures) for this number of trials
+    subplot(2,2,ktrials);
+    
+    rolls = randi(6,1, Ntrials(ktrials)); % do the random trials
+    
+    sample_mean = mean(rolls); % compute the sample mean
+    sample_var = var(rolls); % compute the sample variance
+    
+    %Each call to histogram will produce a plot.  You might consider
+    %putting these in separate figures or subplots
+    
+    % These calls are correct, but I won't do it again.  You're CMPEs; you
+    % can figure it out from here
+    
+    %Raw histogram
+    hist_raw=histogram(rolls,'BinEdges',bin_edges); %histogram returns a structure, check it out!
+    
+    %Normalized histogram, note calling parameters
+    hist_norm = histogram(rolls,'BinEdges',bin_edges,'Normalization','probability');
+    
+    
+    hold on;
+    % the theoretical pmf is pk = 1/6, k=1,2,...,6 because the die is fair
+    %plot(1/6); % plot the theoretical ! This function didn't do what it
+    %was supposed to
+    yline(1/6, 'color', 'g', 'LineWidth', 3);
+    hold off;
+    
+    % Professional quality plots always have axes labels
+    xlabel('Number of dots');
+    ylabel('Probability');
+    axis([0 7 0 0.25]);  %...and always have an appropriate scale
+    
+    % ...and always have a title
+    title(['Subplot ', int2str(ktrials), ': N = ', int2str(Ntrials(ktrials))]);
+    
+    %...and almost always have a grid
+    grid on
+    
+    %...and a legend.
+    legend('Scaled histogram','Prob Mass Fnc (PMF)');
+    disp(['For ',int2str(Ntrials(ktrials)),' sample mean: ',num2str(sample_mean),' sample variance: ',num2str(sample_var)]);
+end; % loop on the trials
+
+sgtitle('Section 3.1 N rolls of a fair die');
+
+mean_th = 3.5; % compute the theoretical mean or average
+var_th = 2.9167; % compute the theoretical variance
+
+disp(['Theoretical mean = ',num2str(mean_th),' theoretical variance: ',num2str(var_th)]);
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+disp(' ');
+
+% account for the fact that you want separate plots for each section
+
+%% Section 3.2 PMF for binary strings
+disp(' ');
+disp('Section 3.2 PMF for Binary String');
+
+% Don't forget new figures
+
+n = 100;  % number of columns = length of binary string
+Ntrials = [100 1000 10000];  % diffent number of trials, per assignment
+p1 = [0.5 0.9 0.1];  % different values of p1 given in the assignement
+bins_edges = [0.5:100.5]; % fill in the correct edges
+
+% set up storage for random variable statistics (small "s")
+outTable = zeros(length(Ntrials), length(p1));
+
+for ktrials = 1:length(Ntrials)
+    
+    % Each trial consists of 100 digits
+    random_numbers = rand(Ntrials(ktrials),100);  % 
+    
+    % Do you need a new figure?
+    figure();
+    
+    
+    for kp = 1:length(p1) %loop on values of p1
+        
+        subplot(3,1,kp);
+        work = (random_numbers<=p1(kp)); % set to 1's and zeros using p1
+        % think about how this works! It's a useful trick that you will
+        % need in later projects
+        
+        data = zeros(1,100); % initialize location of first 1 in each sample
+        for kn = 1:Ntrials(ktrials)  % for each of the 100 element samples
+    
+            % This code finds the location of the first one, or, if there
+            % are no ones, establishes 101 as the index
+            i1 = find(work(kn,:)==1); % find all of the 1's
+            if length(i1)==0  % if there are none
+                data(kn)=n+1; %    indicate beyond end of sequence
+            else
+                data(kn)=min(i1);% otherwise take the first 1
+            end
+        end
+        
+        % Generate the raw histogram for this sequence
+        hist_raw=histogram(data, 'BinEdges', bins_edges);
+        % Generate the scaled histogram for this sequence
+        %   Use 'Normalization','probability' again, because this is 
+        %   a PMF
+        hist_norm=histogram(data, 'BinEdges', bins_edges, 'Normalization', 'probability');
+
+        % Determine the theoretical geometric PMF and plot it on the same
+        % axes as the normalized PMF
+        k = (0:100);
+        theoretical_pmf = (1 - p1(kp)).^k * p1(kp);
+        
+        hold on;
+        stem(k, theoretical_pmf);
+        hold off;
+
+        xlim([0 50]);
+        
+        % Label your plots.  If you use subplots, and all subplots have the
+        % same x-axis, you can label the x-axis of only the lowest subplot in each 
+        % column of plots
+        xlabel("Bits Until First 1 Appearance");
+        ylabel("Probability of First Appearance");
+        legend('Scaled histogram', 'Prob Mass Fnc (PMF)');
+        title(['Subplot ', int2str(kp), ': p = ', num2str(p1(kp))]);
+        %title(['Section 3.2: ', int2str(Ntrials(ktrials)), ' index of first binary 1 in string for p: ', num2str(p1(kp))]);
+        %Compute and the sample mean and variance
+        sample_mean = mean(data);
+        sample_var = var(data);
+        
+        %Compute and save the population mean and variance
+        pop_mean = 1/p1(kp);
+        pop_var = (1 - p1(kp)) / (p1(kp)^2);
+        disp(['For ', int2str(Ntrials(ktrials)), ...
+            ' with p: ', num2str(p1(kp)), ', sample mean: ', ...
+            num2str(sample_mean), ' sample variance: ', num2str(sample_var), ...
+            ' population mean: ', num2str(pop_mean), ...
+            ' and population variance: ', num2str(pop_var)]);
+        
+        % Do whatever bookkeeping or housekeeping you need to do at the end of the loop
+        % combine means and vars into single group
+        values = [sample_mean, sample_var, pop_mean, pop_var];
+        sgtitle(['Section 3.2: Index of First Binary 1 in String for N = ', int2str(Ntrials(ktrials))]);
+        grid on;
+        
+    end % loop on p1
+    
+end
+
+% Display the means and variances in a way that makes sense for you,
+% because you have to report them in the Project report.
+
+
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+disp(' '); 
+
+
+%% Section 3.3 exponentially distributed
+disp(' ');
+disp('Section 3.3 Exponentially Distributed');
+
+% Set up new plots as necessary.  Remember, you need ALL of the plots
+
+
+Ntrials = [10 1000 100000]; %set according to the assignment
+lambda = 0.5;  % as given in the assignment
+
+theory_m =  1/lambda;   % analytical or population mean == mu
+theory_v = 1/(lambda^2); % analytical or population variance == sigma^2
+for ktrials = 1:length(Ntrials)   % repeat for each number of trials
+    
+      figure();
+      % Set the bin edges
+      bins_edges = [0.5: 20.5];
+      
+      % Generate the appropriate number of independent random trials
+      data = randx(1,Ntrials(ktrials),lambda); % randx is given 
+      
+      % Compute (and plot) the raw histogram
+      hist_raw = histogram(data, 'BinEdges', bins_edges);
+
+      % used to compute the scaling factor
+      %hist_raw = histogram(data, 40, 'BinLimits', [0.5 20.5]);
+      
+      % Compute (and plot) the normalized histogram
+      %    Use 'Normalization','pdf' because an exponential RV is a
+      %    continuous random variable and has a pdf, not a pmf.
+      hist_norm = histogram(data, 'BinEdges', bins_edges, 'Normalization', 'pdf');
+      
+      % used to compute the scaling factor with the line above
+      %hist_norm = histogram(data, 40, 'BinLimits', [0.5 20.5], 'Normalization', 'pdf');
+      
+      % Compute and plot the true pdf on the same axes as the normalized
+      % histogram
+      k = (0:20);
+      theoretical_pdf = lambda * exp(-lambda * k);
+      hold on;
+      plot(k, theoretical_pdf);
+      hold off;
+
+      % Compute the sample mean and variance and display them
+      sample_mean = mean(data);
+      sample_var = var(data);
+
+      % labels and titles
+      xlabel('Input');
+      ylabel('Probability');
+      title(['Section 3.3: N = ', int2str(Ntrials(ktrials)), ' Probability Density Function']);
+      legend('Scaled Histogram', 'Theoretical Prob Density Fnc (PDF)');
+
+      % Either compare the sample mean and variance with the population
+      % mean and variance, or save the results to output later
+      disp(['For N = ', int2str(Ntrials(ktrials)), ...
+          ', sample and population mean are ', num2str(sample_mean), ...
+          ' & ', num2str(theory_m), ...
+          ' with sample and population variance ', num2str(sample_var), ...
+          ' & ', num2str(theory_v)]);
+end;
+
+%Compare the sample mean and variance to the population mean and variance
+%as requested
+
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+disp(' ');
+
+
+%% Section 3.4  N(0,1)
+disp(' ');
+disp('Section 3.4 Samples from N(0,1)');
+
+Ntrials = [10 1000 100000];  % number of trials per assignment
+
+% Theoretical (analytical) (population) mean and variance
+theory_m = 0;  % given in assignment
+theory_v = 1;  % given in assignement
+
+for ktrials = 1:length(Ntrials)  % loop on the different number of trials
+      figure();
+      % Set the bin edges
+      bin_edges = [-10.5:10.5];
+      % Generate the random data
+      data = randn(1,Ntrials(ktrials)); % function randn gives samples from N(0,1) by definition
+      
+      % Compute the raw histogram
+      hist_raw = histogram(data, 'BinEdges', bin_edges);
+
+      % Compute the normalized histogram with pdf normalization
+      hist_norm = histogram(data, 'BinEdges', bin_edges, 'Normalization', 'pdf');
+
+      % Compute the theoretical pdf and plot on same axes as normalized  
+      b = (-10:10);
+      pdf = exp(-(b-theory_m).^2/(2*theory_v))/sqrt(2*pi*theory_v);
+      hold on;
+      plot(b, pdf);
+      hold off;
+
+      % label and title
+      xlabel('Input');
+      ylabel('Density of Distribution');
+      title(['Section 3.4 N = ', num2str(Ntrials(ktrials)), ' Gaussian Probability Density Function']);
+      legend('Scaled Histogram', 'Theoretical Prob Density Fnc (PDF)');
+
+      % Compute the sample mean and variance and either save or print
+      
+      sample_m = mean(data);
+      sample_v = var(data);
+      disp(['For N = ', num2str(Ntrials(ktrials)), ...
+          ' sample mean and variance are ', num2str(sample_m), ...
+          ' & ' , num2str(sample_v)]);
+
+end;
+disp(['Theoretical mean and variance ', num2str(theory_m), ' & ', num2str(theory_v)]);
+
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+disp(' ');
+
+%% Section 3.5  N(-2,9)
+disp(' ');
+disp('Section 3.5 Samples from N(-2,9)');
+
+% Set the number of trials and the theoretical mean and variance
+Ntrials = [10 1000 100000];
+theory_m = -2;
+theory_v = 9;
+
+for ktrials = 1:length(Ntrials) % loop on the number of trials
+    
+      figure();
+      % Set the bin edges
+      bin_edges = [-15.5:15.5];
+      
+      % Create the data. Note that for N(m,s2) instead of N(0,1),
+      % we use  sqrt(s2)*randn + m.  You might ask yourself "why this
+      % formula?"
+      % I won't say this again, but you will need it in future projects
+      
+      data = sqrt(theory_v)*randn(1,Ntrials(ktrials))+theory_m; % samples from N(0,1) by definition
+      
+      % Compute and plot both histograms on different subplots or figures
+      hist_raw = histogram(data, 'BinEdges', bin_edges);
+
+      hist_norm = histogram(data, 'BinEdges', bin_edges, 'Normalization', 'pdf');
+
+      % theoretical pdf function
+      b = [-15:15];
+      pdf = exp(-(b-theory_m).^2/(2*theory_v))/sqrt(2*pi*theory_v);
+      hold on;
+      plot(b, pdf);
+      hold off;
+
+      % label and title stuff
+      xlabel('Input');
+      ylabel('Density of Distribution');
+      title(['Section 3.4 N = ', num2str(Ntrials(ktrials)), ' Gaussian Probability Density Function']);
+      legend('Scaled Histogram', 'Theoretical Prob Density Fnc (PDF)');
+      
+      % Compute the sample mean and variance and display or save as
+      % necessary
+      sample_mean = mean(data);
+      sample_var = var(data);
+      disp(['For N = ', num2str(Ntrials(ktrials)), ...
+          ' sample mean and variance are ', num2str(sample_mean), ...
+          ' & ' , num2str(sample_var)]);
+      
+end;
+disp(['Theoretical mean and variance ', num2str(theory_m), ' & ', num2str(theory_v)]);
+
+% Display results as necessary
+
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+disp(' ');
+
+
+%% Section 3.6 
+disp(' ');
+disp(['Section 3.6 Computing Probabilities from PDF']);
+
+Ntrials = [10 1000 100000];
+theory_m = -2;
+theory_v = 9;
+
+data = sqrt(theory_v)*randn(1,Ntrials(3))+theory_m;
+bin_edges = [-15.5:15.5];
+
+hist_raw = histogram(data, 'BinEdges', bin_edges);
+% Estimate the requested probability using the raw histogram from 3.5
+%   This is a sum followed by a division
+ix = find((hist_raw.BinEdges >= -5) & (hist_raw.BinEdges <= 1));
+raw_sum = sum(hist_raw.Values(ix));
+raw_prob = raw_sum / Ntrials(3);
+
+% Estimate the required probability using the normalized histogram from 3.5
+% above.  This is equivalent to a Riemann sum from Calc II
+hist_norm = histogram(data, 'BinEdges', bin_edges, 'Normalization', 'pdf');
+ix = find((hist_norm.BinEdges >= -5) & (hist_norm.BinEdges <= 1));
+norm_prob = sum(hist_norm.Values(ix));
+disp(['Section 3.6 N = ', int2str(Ntrials(3)), ' with probability of [-5, 1] (raw): ', num2str(raw_prob), ' and (norm): ', num2str(norm_prob)]);
+
+% Estimate the required probability by integration.  Hint: you could use
+% the Q function!
+mu = theory_m;
+var = theory_v;
+func = @(x) (1/sqrt(2*pi*var)) * exp(-(x - mu).^2 / (2 * var));
+q = integral(func, -5, 1);
+
+disp(['Numerical integration of PDF: ', num2str(q)]);
+
+% That's it, you're done!
+
+      
+##### SOURCE END #####
+--></body></html>
